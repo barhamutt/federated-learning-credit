@@ -55,7 +55,7 @@ def set_format(title=None):
         print(f"{title:^60}")
     print("=" * 60 + "\n")
 
-# SEÇÃO 1 — INFORMAÇÕES GERAIS DO DATASET
+# SEÇÃO 1 - INFORMAÇÕES GERAIS DO DATASET
 #===========================================
 def dataset_info(df: pd.DataFrame) -> None:
     """
@@ -68,7 +68,7 @@ def dataset_info(df: pd.DataFrame) -> None:
     print()
     df.info()
 
-# SEÇÃO 2 — ANÁLISE DE VALORES AUSENTES (MISSING VALUES)
+# SEÇÃO 2 - ANÁLISE DE VALORES AUSENTES (MISSING VALUES)
 #==========================================================
 def out_value(df: pd.DataFrame) -> None:
     """
@@ -119,7 +119,7 @@ def out_value(df: pd.DataFrame) -> None:
     print(f"\n  Total de células ausentes: {total_ausentes} / {total_celulas} "
           f"({total_ausentes/total_celulas*100:.2f}% do dataset)")
 
-# SEÇÃO 3 — ESTATÍSTICAS DESCRITIVAS
+# SEÇÃO 3 - ESTATÍSTICAS DESCRITIVAS
 # ======================================
 def descriptive(df: pd.DataFrame) -> None:
     """
@@ -146,7 +146,7 @@ def descriptive(df: pd.DataFrame) -> None:
     print(stats.to_string())
     print("\n  skew > 1 ou < -1 indica forte assimetria (presença de outliers)")
 
-# SEÇÃO 4 — DISTRIBUIÇÃO DA VARIÁVEL ALVO (BAD)
+# SEÇÃO 4 - DISTRIBUIÇÃO DA VARIÁVEL ALVO (BAD)
 # ================================================
 def target_value(df: pd.DataFrame) -> None:
     """
@@ -173,7 +173,7 @@ def target_value(df: pd.DataFrame) -> None:
         print("  [!]  Dataset desbalanceado — considere técnicas como SMOTE ou "
               "ajuste de class_weight no modelo.")
 
-# SEÇÃO 5 — VARIÁVEIS CATEGÓRICAS
+# SEÇÃO 5 - VARIÁVEIS CATEGÓRICAS
 # ==================================
 def cat_cols(df: pd.DataFrame) -> list:
     """Retorna lista de colunas categóricas (tipo object ou string)."""
@@ -197,7 +197,7 @@ def unic_values(df: pd.DataFrame) -> None:
         tabela = pd.DataFrame({'Contagem': val, '%': pct})
         print(tabela.to_string())
 
-# SEÇÃO 6 — DETECÇÃO DE OUTLIERS (MÉTODO IQR)
+# SEÇÃO 6 - DETECÇÃO DE OUTLIERS (MÉTODO IQR)
 # ==============================================
 def detectar_outliers(df: pd.DataFrame) -> None:
     """
@@ -238,19 +238,19 @@ def detectar_outliers(df: pd.DataFrame) -> None:
     tabela = pd.DataFrame(resultado).set_index('Coluna')
     tabela = tabela.sort_values('%', ascending=False)
     print(tabela.to_string())
-    print(f"\n  Método: IQR × {FATOR_IQR}  |  Colunas com outliers > 5%: "
+    print(f"\n  Método: IQR x {FATOR_IQR}  |  Colunas com outliers > 5%: "
           f"{(tabela['%'] > 5).sum()}")
 
-# SEÇÃO 7 — CORRELAÇÃO COM A VARIÁVEL ALVO
+# SEÇÃO 7 - CORRELAÇÃO COM A VARIÁVEL ALVO
 # ============================================
 def correlacao_com_alvo(df: pd.DataFrame) -> None:
     """
     Calcula a correlação de Pearson entre cada feature numérica e BAD.
 
     Correlação de Pearson vai de -1 a +1:
-      +1 → relação positiva perfeita (feature sobe, BAD sobe)
-      -1 → relação negativa perfeita
-       0 → sem relação linear
+      +1 -> relação positiva perfeita (feature sobe, BAD sobe)
+      -1 -> relação negativa perfeita
+       0 -> sem relação linear
 
     Valores absolutos > 0.1 já são relevantes em datasets financeiros.
     Features com correlação próxima de 0 podem ter baixo poder preditivo.
@@ -294,4 +294,4 @@ if __name__ == "__main__":
 
     set_format("CORRELAÇÃO COM A VARIÁVEL ALVO (BAD)")
     correlacao_com_alvo(df=df)
-    print("\n\n\n") #FIM DA ANÁLISE EXPLORATÓRIA
+    print("\n\n") #FIM DA ANÁLISE EXPLORATÓRIA

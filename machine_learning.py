@@ -111,11 +111,11 @@ def carregar_e_preprocessar_dados(caminho: str = CAMINHO_CSV):
     df = pd.read_csv(caminho, sep=',')
     print(f"      -> {df.shape[0]} linhas x {df.shape[1]} colunas")
  
-    # ── Paralelismo: pré-processar cada coluna em um processo separado ────────
+    # Paralelismo: pré-processar cada coluna em um processo separado
     print("[2/4] Pré-processando colunas em paralelo...")
     inicio = time.time()
  
-    # Separamos a variável-alvo antes — ela não precisa de pré-processamento
+    # Separamos a variável-alvo antes - ela não precisa de pré-processamento
     colunas_features = [c for c in df.columns if c != 'BAD']
     tarefas = [(col, df[col].copy()) for col in colunas_features]
  
@@ -174,7 +174,7 @@ class RedeNeural(nn.Module):
                            -> Dense(1)  -> Sigmoid -> probabilidade [0, 1]
 
     A saída Sigmoid retorna a probabilidade de o cliente ser inadimplente.
-    Limiar de decisão: prob > 0.5 → BAD = 1 (inadimplente).
+    Limiar de decisão: prob > 0.5 -> BAD = 1 (inadimplente).
     """
 
     def __init__(self, input_dim: int):
