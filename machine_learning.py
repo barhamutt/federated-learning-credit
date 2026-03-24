@@ -81,7 +81,7 @@ def preprocessar_coluna(args: Tuple) -> Tuple[str, pd.Series]:
     """
     nome_col, serie = args
  
-    if serie.dtype == 'object':
+    if serie.dtype == 'object' or pd.api.types.is_string_dtype(serie):
         # Preenche com valor mais frequente
         serie = serie.fillna(serie.mode()[0])
         # Transforma strings em inteiros
@@ -427,11 +427,11 @@ def main():
 
     # Exibe métricas do último round de forma mais legível
     if historico.metrics_distributed:
-        ultimo_round = list(historico.metrics_distributed.items())[-1]
-        round_num, metricas = ultimo_round
-        print(f"\n Métricas do último round ({round_num}):")
-        for nome, valor in metricas.items():
-            print(f"   {nome:12s} = {valor:.4f}")
+        print(f"\n Métricas do último round (round {NUM_ROUNDS}):")
+        for nome, lista_valores in historico.metrics_distributed.items():
+            # lista_valores = [(1, val), (2, val), ..., (10, val)]
+            ultimo_valor = lista_valores[-1][1]  # pega o valor do último round
+            print(f"   {nome:12s} = {ultimo_valor:.4f}")
 
 # =============================================================================
 # PONTO DE ENTRADA
