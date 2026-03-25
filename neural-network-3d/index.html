@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rede Neural — HMEQ Credit Risk</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="canvas-container"></div>
+
+<div id="top-center">
+  <h1>REDE NEURAL — HMEQ CREDIT RISK</h1>
+  <p>Arquitetura: 12 → 16 → 8 → 1 | Aprendizado Federado (FedAvg)</p>
+</div>
+
+<div id="left-panel">
+  <div class="panel-title">Features de Entrada</div>
+  <div id="features-list"></div>
+</div>
+
+<div id="right-panel">
+  <div class="output-box">
+    <div class="output-label">P( Inadimplente )</div>
+    <div class="output-prob" id="out-prob">—</div>
+    <div class="output-verdict" id="out-verdict">aguardando sinal</div>
+  </div>
+
+  <div class="panel-title">Arquitetura</div>
+  <div class="net-info">
+    <div class="net-row"><span class="net-key">Parâmetros</span><span class="net-val">313</span></div>
+    <div class="net-row"><span class="net-key">Camadas</span><span class="net-val">4</span></div>
+    <div class="net-row"><span class="net-key">Ativação</span><span class="net-val">ReLU + Sigmoid</span></div>
+    <div class="net-row"><span class="net-key">Loss</span><span class="net-val">BCELoss</span></div>
+    <div class="net-row"><span class="net-key">Otimizador</span><span class="net-val">Adam 0.01</span></div>
+  </div>
+
+  <div style="margin-top:12px">
+    <div class="panel-title" style="margin-bottom:6px">Camadas</div>
+    <div class="layer-chip"><span class="chip-dot" style="background:#378ADD"></span><span style="font-size:10px;font-family:monospace">Entrada — 12 features</span></div>
+    <div class="layer-chip"><span class="chip-dot" style="background:#7F77DD"></span><span style="font-size:10px;font-family:monospace">Dense(16) → ReLU</span></div>
+    <div class="layer-chip"><span class="chip-dot" style="background:#1D9E75"></span><span style="font-size:10px;font-family:monospace">Dense(8) → ReLU</span></div>
+    <div class="layer-chip"><span class="chip-dot" style="background:#D85A30"></span><span style="font-size:10px;font-family:monospace">Dense(1) → Sigmoid</span></div>
+  </div>
+</div>
+
+<div id="status-bar">Arraste para rotacionar · Scroll para zoom</div>
+<div id="bottom-bar">
+  <button class="bb-btn active" id="btn-idle" onclick="setMode('idle')">Idle</button>
+  <button class="bb-btn" id="btn-forward" onclick="setMode('forward')">▶ Forward Pass</button>
+  <button class="bb-btn" id="btn-auto" onclick="setMode('auto')">⟳ Auto</button>
+  <button class="bb-btn" id="btn-random" onclick="randomInput()">Novo paciente</button>
+</div>
+
+<div id="tooltip"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
