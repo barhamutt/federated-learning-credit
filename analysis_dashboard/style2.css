@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500&family=Space+Grotesk:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #080c14;
+  --paper: rgba(10,16,28,0.92);
+  --ink: #c8d8f0;
+  --ink2: #9fb3d1;
+  --muted: #4a6080;
+  --rule: rgba(80,160,255,0.15);
+  --rule2: rgba(80,160,255,0.08);
+  --accent: #3b8fff;
+  --accent2: #ff6b6b;
+  --accent3: #00e5a0;
+  --accent4: #ffc857;
+  --grid: rgba(80,160,255,0.06);
+  --fig-bg: rgba(255,255,255,0.02);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: radial-gradient(circle at top, #0f1b2e, #080c14 60%);
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ── PAGE LAYOUT ── */
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 32px 60px;
+}
+
+/* ── PAPER HEADER ── */
+.paper-header {
+  border-top: 2.5px solid var(--ink);
+  border-bottom: 1px solid var(--rule);
+  padding: 20px 0 16px;
+  margin-bottom: 28px;
+}
+
+.paper-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.paper-subtitle {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.paper-meta {
+  display: flex;
+  gap: 32px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 0.5px solid var(--rule);
+  font-size: 11px;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── SECTION ── */
+.section {
+  margin-bottom: 36px;
+}
+
+.section-label {
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 0.5px solid var(--rule);
+  padding-bottom: 6px;
+  margin-bottom: 16px;
+}
+
+/* ── FIGURE GRID ── */
+.fig-grid {
+  display: grid;
+  gap: 16px;
+}
+.fig-grid-2 { grid-template-columns: 1fr 1fr; }
+.fig-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+.fig-grid-12 { grid-template-columns: 1.2fr 1fr; }
+.fig-grid-21 { grid-template-columns: 1fr 1.2fr; }
+
+/* ── FIGURE BOX ── */
+.fig-box {
+  background: var(--paper);
+  border: 0.5px solid var(--rule);
+  border-radius: 2px;
+  padding: 16px;
+  position: relative;
+}
+
+.fig-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  letter-spacing: 0.05em;
+}
+
+.fig-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.fig-canvas-wrap {
+  background: var(--fig-bg);
+  border: 0.5px solid var(--rule2);
+  border-radius: 1px;
+  padding: 8px;
+  position: relative;
+}
+
+.fig-caption {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.5;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── STAT CARDS ── */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  background: var(--paper);
+  border: 0.5px solid var(--rule);
+  border-radius: 2px;
+  padding: 14px 12px;
+  border-top: 2.5px solid var(--accent);
+}
+
+.stat-card.red { border-top-color: var(--accent2); }
+.stat-card.green { border-top-color: var(--accent3); }
+.stat-card.amber { border-top-color: var(--accent4); }
+.stat-card.gray { border-top-color: var(--muted); }
+
+.stat-label {
+  font-size: 9px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 600;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.stat-sub {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── TABLE ── */
+.sci-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.sci-table th {
+  background: var(--fig-bg);
+  border-bottom: 1.5px solid var(--rule);
+  border-top: 1.5px solid var(--rule);
+  padding: 7px 10px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--ink2);
+}
+
+.sci-table td {
+  padding: 6px 10px;
+  border-bottom: 0.5px solid var(--rule2);
+  color: var(--ink2);
+}
+
+.sci-table tr:last-child td { border-bottom: none; }
+.sci-table tr:hover td { background: var(--fig-bg); }
+
+.tag {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 2px;
+  font-size: 10px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.tag-red  { background: rgba(255,107,107,0.15); color: #ff6b6b; }
+.tag-amr  { background: rgba(255,200,87,0.15); color: #ffc857; }
+.tag-grn  { background: rgba(0,229,160,0.15); color: #00e5a0; }
+
+/* ── FOOTNOTES ── */
+.footnotes {
+  border-top: 0.5px solid var(--rule);
+  padding-top: 12px;
+  margin-top: 8px;
+  font-size: 10px;
+  color: var(--muted);
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1.6;
+}
+
+/* ── TABS ── */
+.tab-nav {
+  display: flex;
+  gap: 0;
+  border-bottom: 1.5px solid var(--rule);
+  margin-bottom: 20px;
+}
+
+.tab-btn {
+  padding: 8px 20px;
+  border: none;
+  background: transparent;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1.5px;
+  transition: all .15s;
+}
+.tab-btn:hover { color: var(--ink); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 500; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ── PROGRESS BAR ── */
+.pbar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 0;
+  border-bottom: 0.5px solid var(--rule2);
+}
+.pbar-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink2); width: 70px; flex-shrink: 0; }
+.pbar-track { flex: 1; height: 8px; background: var(--rule2); border-radius: 1px; overflow: hidden; }
+.pbar-fill  { height: 100%; border-radius: 1px; transition: width .8s cubic-bezier(.4,0,.2,1); }
+.pbar-val   { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); width: 38px; text-align: right; flex-shrink: 0; }
+.pbar-sev   { font-size: 10px; width: 52px; flex-shrink: 0; text-align: right; }
+
+@media (max-width: 700px) {
+  .fig-grid-2,.fig-grid-3,.fig-grid-12,.fig-grid-21 { grid-template-columns: 1fr; }
+  .stat-row { grid-template-columns: repeat(2,1fr); }
+}

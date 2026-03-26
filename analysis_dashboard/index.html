@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Científica — HMEQ Credit Risk</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="page">
+
+  <!-- HEADER -->
+  <div class="paper-header">
+    <div class="paper-title">Análise Exploratória e Avaliação de Aprendizado Federado<br>aplicados ao Dataset HMEQ (Home Equity Mortgage)</div>
+    <div class="paper-meta">
+      <span>Autores:<br/>Ian Lucas Lobato Barra da Silva<br/>Ilard Moisés da Silva Lamarão</span>
+      <span><br/>Dataset: 5.960 registros · 13 variáveis</span>
+      <span><br/>Modelo: MLP 12→16→8→1 · FedAvg · 3 clientes · 10 rounds</span>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab(0)">I. Dataset</button>
+    <button class="tab-btn" onclick="switchTab(1)">II. Valores Ausentes</button>
+    <button class="tab-btn" onclick="switchTab(2)">III. Distribuições</button>
+    <button class="tab-btn" onclick="switchTab(3)">IV. Correlações</button>
+    <button class="tab-btn" onclick="switchTab(4)">V. Aprendizado Federado</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB 1 — DATASET
+  ══════════════════════════════════════════════════════ -->
+  <div class="tab-panel active" id="tab0">
+
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-label">Total de registros</div><div class="stat-value">5.960</div><div class="stat-sub">RangeIndex 0–5959</div></div>
+      <div class="stat-card gray"><div class="stat-label">Variáveis</div><div class="stat-value">13</div><div class="stat-sub">9 float · 2 int · 2 str</div></div>
+      <div class="stat-card red"><div class="stat-label">Missing total</div><div class="stat-value">5.271</div><div class="stat-sub">6.80% das células</div></div>
+      <div class="stat-card green"><div class="stat-label">Adimplentes</div><div class="stat-value">80.1%</div><div class="stat-sub">4.771 registros</div></div>
+      <div class="stat-card amber"><div class="stat-label">Inadimplentes</div><div class="stat-value">19.9%</div><div class="stat-sub">1.189 registros · razão 4:1</div></div>
+    </div>
+
+    <div class="fig-grid fig-grid-12">
+      <!-- Distribuição BAD -->
+      <div class="fig-box">
+        <div class="fig-label">Fig. 1</div>
+        <div class="fig-title">Distribuição da variável alvo BAD</div>
+        <div class="fig-canvas-wrap"><canvas id="c-bad" height="200"></canvas></div>
+        <div class="fig-caption">Razão de desbalanceamento 4.0:1. O dataset apresenta desbalanceamento significativo, justificando o uso do F1-Score como métrica principal em detrimento da acurácia.</div>
+      </div>
+
+      <!-- Tabela features -->
+      <div class="fig-box">
+        <div class="fig-label">Tab. 1</div>
+        <div class="fig-title">Dicionário de variáveis</div>
+        <table class="sci-table">
+          <thead><tr><th>Variável</th><th>Tipo</th><th>Descrição</th></tr></thead>
+          <tbody>
+            <tr><td>BAD</td><td>int</td><td>Alvo: 1=inadimplente, 0=adimplente</td></tr>
+            <tr><td>LOAN</td><td>int</td><td>Valor solicitado do empréstimo</td></tr>
+            <tr><td>MORTDUE</td><td>float</td><td>Valor devido na hipoteca</td></tr>
+            <tr><td>VALUE</td><td>float</td><td>Valor atual do imóvel</td></tr>
+            <tr><td>REASON</td><td>str</td><td>Motivo (DebtCon / HomeImp)</td></tr>
+            <tr><td>JOB</td><td>str</td><td>Categoria profissional</td></tr>
+            <tr><td>YOJ</td><td>float</td><td>Anos no emprego atual</td></tr>
+            <tr><td>DEROG</td><td>float</td><td>Registros depreciativos</td></tr>
+            <tr><td>DELINQ</td><td>float</td><td>Linhas de crédito em atraso</td></tr>
+            <tr><td>CLAGE</td><td>float</td><td>Idade da linha de crédito (meses)</td></tr>
+            <tr><td>NINQ</td><td>float</td><td>Consultas de crédito recentes</td></tr>
+            <tr><td>CLNO</td><td>float</td><td>Número de linhas de crédito</td></tr>
+            <tr><td>DEBTINC</td><td>float</td><td>Relação dívida/renda</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB 2 — VALORES AUSENTES
+  ══════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab1">
+    <div class="fig-grid fig-grid-21">
+
+      <div class="fig-box">
+        <div class="fig-label">Fig. 2</div>
+        <div class="fig-title">Percentual de valores ausentes por variável</div>
+        <div class="fig-canvas-wrap"><canvas id="c-missing" height="260"></canvas></div>
+        <div class="fig-caption">Linhas tracejadas indicam limiares: 5% (atenção) e 10% (crítico). DEBTINC e DEROG ultrapassam o limiar crítico e requerem imputação ou exclusão.</div>
+      </div>
+
+      <div class="fig-box">
+        <div class="fig-label">Tab. 2</div>
+        <div class="fig-title">Análise de completude por variável</div>
+        <div style="margin-bottom:12px">
+          <div class="pbar-wrap" style="font-weight:500;border-bottom:1.5px solid var(--rule);padding-bottom:8px;margin-bottom:4px">
+            <span class="pbar-label" style="color:var(--ink)">Variável</span>
+            <span style="flex:1;font-size:10px;color:var(--muted);font-family:monospace">Completude</span>
+            <span class="pbar-val" style="color:var(--ink)">Missing</span>
+            <span class="pbar-sev" style="color:var(--ink)">Status</span>
+          </div>
+          <div id="missing-bars"></div>
+        </div>
+        <div class="footnotes">
+          ¹ Limiar crítico ≥10%: imputação com mediana (numéricas) ou moda (categóricas) recomendada.<br>
+          ² DEBTINC (21.26%): maior proporção de dados faltantes — impacto direto no modelo.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB 3 — DISTRIBUIÇÕES
+  ══════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab3">
+    <div class="fig-grid fig-grid-2" style="margin-bottom:16px">
+      <div class="fig-box">
+        <div class="fig-label">Fig. 3a</div>
+        <div class="fig-title">Assimetria (skewness) das variáveis numéricas</div>
+        <div class="fig-canvas-wrap"><canvas id="c-skew" height="220"></canvas></div>
+        <div class="fig-caption">|skew| &gt; 1 indica assimetria forte (presença de outliers). DEROG (5.32) e DELINQ (4.02) apresentam distribuição extremamente assimétrica.</div>
+      </div>
+
+      <div class="fig-box">
+        <div class="fig-label">Fig. 3b</div>
+        <div class="fig-title">Detecção de outliers — método IQR (×1.5)</div>
+        <div class="fig-canvas-wrap"><canvas id="c-outliers" height="220"></canvas></div>
+        <div class="fig-caption">DELINQ (22.32%) e DEROG (13.80%) apresentam proporção crítica de outliers. Em dados de crédito, outliers podem ser legítimos (ex.: dívida muito alta).</div>
+      </div>
+    </div>
+
+    <div class="fig-grid fig-grid-2">
+      <div class="fig-box">
+        <div class="fig-label">Fig. 3c</div>
+        <div class="fig-title">Distribuição categórica — REASON</div>
+        <div class="fig-canvas-wrap"><canvas id="c-reason" height="160"></canvas></div>
+        <div class="fig-caption">DebtCon (consolidação de dívidas) representa 65.9% dos pedidos. HomeImp (melhoria de imóvel) representa 29.9%.</div>
+      </div>
+      <div class="fig-box">
+        <div class="fig-label">Fig. 3d</div>
+        <div class="fig-title">Distribuição categórica — JOB</div>
+        <div class="fig-canvas-wrap"><canvas id="c-job" height="160"></canvas></div>
+        <div class="fig-caption">Categoria "Other" predomina (40.1%). Sales representa a menor parcela (1.83%), com risco de sub-representação no modelo.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB 4 — CORRELAÇÕES
+  ══════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab4">
+    <div class="fig-grid fig-grid-21">
+      <div class="fig-box">
+        <div class="fig-label">Fig. 4a</div>
+        <div class="fig-title">Correlação de Pearson com variável alvo (BAD)</div>
+        <div class="fig-canvas-wrap"><canvas id="c-corr" height="280"></canvas></div>
+        <div class="fig-caption">Correlação de Pearson captura apenas relações lineares. DELINQ apresenta a maior correlação positiva (r=0.354), indicando que atrasos são o melhor preditor linear de inadimplência.</div>
+      </div>
+
+      <div class="fig-box">
+        <div class="fig-label">Tab. 3</div>
+        <div class="fig-title">Tabela de correlações e poder preditivo</div>
+        <table class="sci-table">
+          <thead><tr><th>Variável</th><th>r (Pearson)</th><th>|r|</th><th>Força</th></tr></thead>
+          <tbody>
+            <tr><td>DELINQ</td><td style="color:var(--accent2)">+0.3541</td><td>0.354</td><td><span class="tag tag-red">Alta</span></td></tr>
+            <tr><td>DEROG</td><td style="color:var(--accent2)">+0.2761</td><td>0.276</td><td><span class="tag tag-amr">Moderada</span></td></tr>
+            <tr><td>DEBTINC</td><td style="color:var(--accent2)">+0.1998</td><td>0.200</td><td><span class="tag tag-amr">Moderada</span></td></tr>
+            <tr><td>NINQ</td><td style="color:var(--accent2)">+0.1750</td><td>0.175</td><td><span class="tag tag-amr">Moderada</span></td></tr>
+            <tr><td>CLAGE</td><td style="color:var(--accent)">−0.1705</td><td>0.171</td><td><span class="tag tag-amr">Moderada</span></td></tr>
+            <tr><td>LOAN</td><td style="color:var(--accent)">−0.0751</td><td>0.075</td><td><span class="tag tag-grn">Baixa</span></td></tr>
+            <tr><td>YOJ</td><td style="color:var(--accent)">−0.0602</td><td>0.060</td><td><span class="tag tag-grn">Baixa</span></td></tr>
+            <tr><td>MORTDUE</td><td style="color:var(--accent)">−0.0482</td><td>0.048</td><td><span class="tag tag-grn">Baixa</span></td></tr>
+            <tr><td>VALUE</td><td style="color:var(--accent)">−0.0300</td><td>0.030</td><td><span class="tag tag-grn">Baixa</span></td></tr>
+            <tr><td>CLNO</td><td style="color:var(--accent)">−0.0042</td><td>0.004</td><td><span class="tag tag-grn">Baixa</span></td></tr>
+          </tbody>
+        </table>
+        <div class="footnotes" style="margin-top:10px">
+          Referência: |r| &gt; 0.3 = alta · 0.1–0.3 = moderada · &lt; 0.1 = baixa.<br>
+          Correlação negativa em CLAGE indica que linhas de crédito mais antigas reduzem risco.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TAB 5 — APRENDIZADO FEDERADO
+  ══════════════════════════════════════════════════════ -->
+  <div class="tab-panel" id="tab5">
+
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-label">Clientes</div><div class="stat-value">3</div><div class="stat-sub">~1.590 amostras/cliente</div></div>
+      <div class="stat-card gray"><div class="stat-label">Rounds</div><div class="stat-value">10</div><div class="stat-sub">5 épocas locais/round</div></div>
+      <div class="stat-card green"><div class="stat-label">Acurácia final</div><div class="stat-value">88.0%</div><div class="stat-sub">round 10 · +4.0pp</div></div>
+      <div class="stat-card amber"><div class="stat-label">F1 final</div><div class="stat-value">0.632</div><div class="stat-sub">round 10 · +0.150</div></div>
+      <div class="stat-card red"><div class="stat-label">Loss mínima</div><div class="stat-value">0.348</div><div class="stat-sub">round 5</div></div>
+    </div>
+
+    <div class="fig-grid fig-grid-2" style="margin-bottom:16px">
+      <div class="fig-box">
+        <div class="fig-label">Fig. 5a</div>
+        <div class="fig-title">Evolução da acurácia e F1-Score por round (distribuído)</div>
+        <div class="fig-canvas-wrap"><canvas id="c-fed-acc" height="200"></canvas></div>
+        <div class="fig-caption">Convergência consistente da acurácia. Oscilação leve nos rounds 6–7 pode indicar instabilidade no gradiente em clientes com distribuição heterogênea.</div>
+      </div>
+
+      <div class="fig-box">
+        <div class="fig-label">Fig. 5b</div>
+        <div class="fig-title">Evolução da loss distribuída por round</div>
+        <div class="fig-canvas-wrap"><canvas id="c-fed-loss" height="200"></canvas></div>
+        <div class="fig-caption">A loss não é monotonicamente decrescente (rounds 6–7: +0.024), comportamento típico em FedAvg com dados não-IID entre clientes.</div>
+      </div>
+    </div>
+
+    <div class="fig-grid fig-grid-2">
+      <div class="fig-box">
+        <div class="fig-label">Tab. 4</div>
+        <div class="fig-title">Métricas completas por round</div>
+        <table class="sci-table">
+          <thead><tr><th>Round</th><th>Acurácia</th><th>F1-Score</th><th>Loss</th><th>Δ Acc</th></tr></thead>
+          <tbody id="fed-table"></tbody>
+        </table>
+      </div>
+
+      <div class="fig-box">
+        <div class="fig-label">Fig. 5c</div>
+        <div class="fig-title">Comparativo acurácia × F1-Score por round</div>
+        <div class="fig-canvas-wrap"><canvas id="c-fed-scatter" height="230"></canvas></div>
+        <div class="fig-caption">Scatter plot rounds 1–10. Tendência de melhora simultânea em ambas as métricas, com maior variância no F1 (métrica mais sensível ao desbalanceamento).</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+<script src="script.js"></script>
+</body>
+</html>
